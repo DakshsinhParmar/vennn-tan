@@ -775,7 +775,7 @@ function PostPage() {
                             />
                           </TimelineIndicator>
                         </TimelineHeader>
-                        <TimelineContent className="mt-4 rounded-lg border px-4 py-3 text-foreground bg-muted/20">
+                        <TimelineContent className="mt-2 rounded-lg border px-4 py-3 text-foreground bg-muted/20">
                           {event.description}
                           {event.links && event.links.length > 0 && (
                             <div className={`flex flex-col gap-1 mt-2`}>

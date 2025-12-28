@@ -78,38 +78,33 @@ const COLLABORATIONS: Collaboration[] = [
 
 export function CollaborationWrap() {
   return (
-    <div className="w-full max-w-xl mx-auto py-4">
+    <div className="w-full max-w-xl mx-auto py-3">
       <Timeline>
         {COLLABORATIONS.map((collab) => (
           <TimelineItem key={collab.id} step={collab.id}>
             <TimelineHeader className="flex justify-between items-center min-h-9">
               <TimelineSeparator />
               <div className="flex flex-col flex-1 min-w-0">
-                <TimelineTitle className="leading-none pt-1">
-                  <div className="flex flex-col gap-0.5">
-                    <div className="flex items-center gap-2 flex-wrap">
+                <TimelineTitle className="leading-none pt-0">
+                  <div className="flex flex-col justify-center leading-none gap-0.5">
+                    <div className="flex items-center gap-2">
                       {collab.postId ? (
                         <Link
                           to="/post/$id"
                           params={{ id: collab.postId.toString() }}
-                          className="font-semibold text-base cursor-pointer line-clamp-2 leading-normal text-foreground/90"
+                          className="font-medium text-sm truncate leading-none text-foreground hover:underline underline-offset-4"
                         >
                           {collab.project}
                         </Link>
                       ) : (
-                        <span className="font-semibold text-base line-clamp-2 leading-normal text-foreground/90">
+                        <span className="font-medium text-sm truncate leading-none text-foreground">
                           {collab.project}
                         </span>
                       )}
                     </div>
-                    <div className="flex flex-col gap-0 text-xs">
-                      <span className="text-muted-foreground font-normal leading-tight line-clamp-1">
-                        {collab.role}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground/60 leading-none pt-0.5">
-                        {collab.date}
-                      </span>
-                    </div>
+                    <span className="text-muted-foreground text-xs font-normal leading-none block">
+                      {collab.role} • {collab.date}
+                    </span>
                   </div>
                 </TimelineTitle>
               </div>
@@ -129,7 +124,7 @@ export function CollaborationWrap() {
               </TimelineIndicator>
             </TimelineHeader>
 
-            <TimelineContent className="mt-4 rounded-lg border text-foreground bg-muted/20 overflow-hidden">
+            <TimelineContent className="mt-2 rounded-lg border text-foreground bg-muted/20 overflow-hidden">
               <div className="flex flex-col divide-y divide-border">
                 {collab.contributions.map((contribution, idx) => (
                   <div key={idx} className="px-4 py-3">

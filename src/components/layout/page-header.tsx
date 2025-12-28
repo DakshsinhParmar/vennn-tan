@@ -34,7 +34,7 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 w-full mx-auto bg-transparent',
+        'sticky top-0 z-50 w-full mx-auto bg-background',
         container.maxWidth.md,
         className,
       )}
