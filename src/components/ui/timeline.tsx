@@ -184,7 +184,7 @@ function TimelineSeparator({
         // Vertical line connecting timeline indicators
         // Position: centered under the 36px indicator at left-[calc(18px-0.5px)] to account for 1px width
         'absolute self-start bg-border group-last/timeline-item:hidden',
-        'group-data-[orientation=vertical]/timeline:left-[calc(18px-0.5px)] group-data-[orientation=vertical]/timeline:top-9 group-data-[orientation=vertical]/timeline:h-[calc(100%-2.25rem)] group-data-[orientation=vertical]/timeline:w-px',
+        'group-data-[orientation=vertical]/timeline:left-4.5 group-data-[orientation=vertical]/timeline:-translate-x-1/2 group-data-[orientation=vertical]/timeline:top-9 group-data-[orientation=vertical]/timeline:h-[calc(100%-2.25rem)] group-data-[orientation=vertical]/timeline:w-px',
         'group-data-[orientation=horizontal]/timeline:-top-6 group-data-[orientation=horizontal]/timeline:-translate-y-1/2 group-data-[orientation=horizontal]/timeline:h-px group-data-[orientation=horizontal]/timeline:w-[calc(100%-1rem-0.25rem)] group-data-[orientation=horizontal]/timeline:translate-x-4.5',
         className,
       )}
