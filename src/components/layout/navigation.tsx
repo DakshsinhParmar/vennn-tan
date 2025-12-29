@@ -93,33 +93,6 @@ export function SidebarNavigation() {
   )
 }
 
-// Mobile Navigation
-export function MobileNavigation() {
-  const [searchOpen, setSearchOpen] = useState(false)
-
-  const handleSearchToggle = () => setSearchOpen(true)
-  const handleSearchClose = () => setSearchOpen(false)
-  const handleNavClick = () => setSearchOpen(false)
-
-  return (
-    <>
-      <nav className="flex h-full items-center px-4 justify-between">
-        {NAV_ITEMS.filter((item) => !item.hideOnMobile).map((item) => (
-          <NavButton
-            key={item.to}
-            item={item}
-            searchOpen={searchOpen}
-            onSearchToggle={handleSearchToggle}
-            onNavClick={handleNavClick}
-            variant="mobile"
-          />
-        ))}
-      </nav>
-      <SearchPanel open={searchOpen} onClose={handleSearchClose} />
-    </>
-  )
-}
-
 // Unified NavButton component
 interface NavButtonProps {
   item: NavItem
@@ -206,5 +179,42 @@ function NavButton({
       )}
       <span className="sr-only">{item.label}</span>
     </Button>
+  )
+}
+
+// Mobile Bottom Navigation
+export function MobileNavigation() {
+  const [searchOpen, setSearchOpen] = useState(false)
+  const { collapse, expand } = useSidebarActions()
+
+  const handleSearchToggle = () => {
+    setSearchOpen(true)
+    collapse()
+  }
+
+  const handleSearchClose = () => {
+    setSearchOpen(false)
+    expand()
+  }
+
+  // Filter items for mobile
+  const mobileItems = NAV_ITEMS.filter((item) => !item.hideOnMobile)
+
+  return (
+    <>
+      <nav className="flex items-center justify-around w-full h-full px-2">
+        {mobileItems.map((item) => (
+          <NavButton
+            key={item.to}
+            item={item}
+            searchOpen={searchOpen}
+            onSearchToggle={handleSearchToggle}
+            onNavClick={() => setSearchOpen(false)}
+            variant="mobile"
+          />
+        ))}
+      </nav>
+      <SearchPanel open={searchOpen} onClose={handleSearchClose} />
+    </>
   )
 }

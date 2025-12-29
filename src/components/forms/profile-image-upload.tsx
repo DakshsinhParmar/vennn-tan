@@ -161,10 +161,10 @@ export function ProfileImageUpload({
 
           {/* Info text - centered on mobile */}
           <div className="flex flex-col gap-1 text-center sm:text-left">
-            <span className={`${text.small} font-medium`}>
+            <span className={`text-sm font-medium`}>
               {value ? 'Click to change' : 'Upload a photo'}
             </span>
-            <span className={text.captionMuted}>JPEG, PNG, WEBP • Max 5MB</span>
+            <span className={text.xsMuted}>JPEG, PNG, WEBP • Max 5MB</span>
           </div>
         </div>
 

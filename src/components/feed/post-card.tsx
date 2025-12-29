@@ -9,7 +9,7 @@ import {
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { UserAvatar } from '@/components/shared'
+import { UserAvatar, ItemRow } from '@/components/shared'
 import { Menu, MenuItem, MenuPopup, MenuTrigger } from '@/components/ui/menu'
 import { cn } from '@/lib/utils'
 import { element, layout } from '@/lib/design'
@@ -64,13 +64,9 @@ export function PostCard({
 }: PostCardProps) {
   const navigate = useNavigate()
 
-  // Handle legacy isDetailView prop
   const effectiveVariant = isDetailView ? 'detail' : variant
   const isDetail = effectiveVariant === 'detail'
 
-  // Image Content - full width with constrained height (Twitter-like)
-  // We use natural aspect ratio but cap it at max-height to prevent layout-breaking tall images.
-  // object-cover handles the crop gracefully if it hits the max-height.
   const imageContent = image && (
     <div className={cn(element.imageCard, 'mt-1.5')}>
       <img
@@ -82,7 +78,6 @@ export function PostCard({
     </div>
   )
 
-  // Owner menu (edit/delete) for own posts
   const ownerMenu = (
     <Menu>
       <MenuTrigger
@@ -132,7 +127,6 @@ export function PostCard({
     </Menu>
   )
 
-  // Non-owner menu (share/report) for other people's posts
   const guestMenu = (
     <Menu>
       <MenuTrigger
@@ -167,118 +161,92 @@ export function PostCard({
     </Menu>
   )
 
-  // Derived permissions
   const isOwner = userRole === 'owner'
   const isCollaborator = userRole === 'collaborator'
 
   const menu = isOwner ? ownerMenu : guestMenu
 
-  // Render Logic
-
   if (isDetail) {
     return (
       <article
         className={cn(
-          `w-full flex flex-col gap-3 py-1 transition-colors`, // Reduced py
+          `w-full flex flex-col gap-2 py-1 transition-colors`,
           className,
         )}
       >
-        {/* Content Body - Full Width */}
-        <div className={`flex flex-col ${layout.card.contentGap} pl-0`}>
+        <div className="flex flex-col gap-1">
           <p className="whitespace-pre-wrap text-base font-semibold leading-normal text-foreground/90">
             {title}
           </p>
-
           {imageContent}
-
           {description && (
-            <div className="prose prose-neutral dark:prose-invert max-w-none text-base leading-relaxed text-muted-foreground mt-2">
-              <p>{description}</p>
-            </div>
+            <p className="text-[15px] leading-relaxed text-muted-foreground mt-1">
+              {description}
+            </p>
           )}
         </div>
       </article>
     )
   }
 
-  // Feed / Profile Layout (Twitter-like: Avatar Left, Content Right)
-  // Using Link wrapper for content body enables cmd/ctrl+click and better accessibility
   const postLink = id ? `/post/${String(id)}` : undefined
 
   return (
     <article
       className={cn(
-        // Basic card structure
-        `w-full flex ${layout.card.gap} ${layout.card.padding} transition-colors`,
+        `w-full flex flex-col ${layout.card.padding} transition-colors`,
         className,
       )}
     >
-      {/* Left Column: Avatar - separate from post link */}
-      <div className="shrink-0">
-        <UserAvatar
-          name={user.name}
-          avatar={user.avatar}
-          initials={user.initials}
-          size="md"
-          profileLink="/profile"
-          showName={false}
-        />
-      </div>
-
-      {/* Right Column: Content */}
-      <div className="flex-1 min-w-0 flex flex-col">
-        {/* Header Row: Name + Time + Menu */}
-        {/* h-9 matches md avatar height for perfect symmetry */}
-        <div
-          className={`flex items-start justify-between ${layout.header.gap} ${layout.header.height}`}
-        >
-          <div
-            className={`flex flex-col justify-center h-full leading-none ${layout.avatar.textGap}`}
-          >
-            <div className={`flex items-center ${layout.header.gap}`}>
-              <Link
-                to="/profile"
-                className="font-medium text-sm truncate leading-none"
-              >
-                {user.name}
-              </Link>
-              {isCollaborator && (
-                <Badge variant="outline" size="sm" className="gap-1">
-                  <UsersIcon className="size-3" weight="bold" />
-                  Member
-                </Badge>
-              )}
-            </div>
-            <span className="text-muted-foreground text-xs font-normal leading-none block">
-              {dateLabel} {date}
-            </span>
+      <ItemRow
+        left={
+          <UserAvatar
+            name={user.name}
+            avatar={user.avatar}
+            initials={user.initials}
+            size="md"
+            profileLink="/profile"
+            showName={false}
+          />
+        }
+        primary={
+          <div className="flex items-center gap-2">
+            <Link
+              to="/profile"
+              className="font-medium text-sm truncate leading-none"
+            >
+              {user.name}
+            </Link>
+            {isCollaborator && (
+              <Badge variant="outline" size="sm" className="gap-1">
+                <UsersIcon className="size-3" weight="bold" />
+                Member
+              </Badge>
+            )}
           </div>
+        }
+        secondary={`${dateLabel} ${date}`}
+        action={menu}
+      />
 
-          {/* Menu - separate from post link */}
-          <div className="flex h-full items-center">{menu}</div>
-        </div>
-
-        {/* Content Body - wrapped in Link for accessibility (supports cmd/ctrl+click) */}
+      {/* Content indented to align with text (avatar 36px + gap-2 8px = 44px ≈ pl-11) */}
+      <div className="pl-11">
         {postLink ? (
           <Link
             to="/post/$id"
             params={{ id: String(id) }}
-            className={`group/content flex flex-col ${layout.card.contentGap} mt-2 cursor-pointer`}
+            className="flex flex-col gap-1 cursor-pointer"
           >
             <p className="whitespace-pre-wrap text-base font-semibold leading-normal text-foreground/90">
               {title}
             </p>
-
             {imageContent}
           </Link>
         ) : (
-          <div
-            className={`group/content flex flex-col ${layout.card.contentGap} mt-2`}
-          >
+          <div className="flex flex-col gap-1">
             <p className="whitespace-pre-wrap text-base font-semibold leading-normal text-foreground/90">
               {title}
             </p>
-
             {imageContent}
           </div>
         )}

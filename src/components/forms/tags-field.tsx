@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
-import { layout } from '@/lib/design'
+import { spacing } from '@/lib/design'
 
 interface TagsFieldProps {
   label: string
@@ -156,46 +156,36 @@ export function TagsField({
 
       <div className="space-y-3 w-full">
         {/* Input and Add Button - Stacked */}
-        <div className={`flex flex-col ${layout.header.gap} w-full`}>
-          <div className="relative">
-            <Input
-              value={inputValue}
-              onChange={(e) => {
-                const newValue = e.target.value
-                if (newValue.length <= maxTagLength) {
-                  setInputValue(newValue)
-                  // Clear invalid input error when user starts typing
-                  if (invalidInputError) setInvalidInputError('')
-                }
-              }}
-              onKeyDown={handleKeyDown}
-              onBlur={onBlur}
-              placeholder={
-                isMaxReached
-                  ? "✨ Max limit reached. You're fully tagged!"
-                  : placeholder
+        <div className={`flex flex-col ${spacing.gap.sm} w-full`}>
+          <Input
+            value={inputValue}
+            onChange={(e) => {
+              const newValue = e.target.value
+              if (newValue.length <= maxTagLength) {
+                setInputValue(newValue)
+                // Clear invalid input error when user starts typing
+                if (invalidInputError) setInvalidInputError('')
               }
-              disabled={isMaxReached}
-              aria-invalid={hasError}
-              size="lg"
-              variant={hasError ? 'destructive' : 'default'}
-              maxLength={maxTagLength}
-              className={cn(
-                'w-full transition-colors duration-200 pe-14',
-                isMaxReached &&
-                  'opacity-60 bg-muted/50 cursor-not-allowed text-center font-medium placeholder:text-muted-foreground',
-              )}
-            />
-            {!isMaxReached && (
-              <div
-                aria-live="polite"
-                className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-muted-foreground text-xs tabular-nums"
-                role="status"
-              >
-                {charCount}/{maxTagLength}
-              </div>
+            }}
+            onKeyDown={handleKeyDown}
+            onBlur={onBlur}
+            placeholder={
+              isMaxReached
+                ? "✨ Max limit reached. You're fully tagged!"
+                : placeholder
+            }
+            disabled={isMaxReached}
+            aria-invalid={hasError}
+            size="lg"
+            variant={hasError ? 'destructive' : 'default'}
+            maxLength={maxTagLength}
+            charCount={!isMaxReached ? charCount : undefined}
+            className={cn(
+              'w-full transition-colors duration-200',
+              isMaxReached &&
+                'opacity-60 bg-muted/50 cursor-not-allowed text-center font-medium placeholder:text-muted-foreground',
             )}
-          </div>
+          />
           {(error || invalidInputError) && (
             <p className="text-sm text-destructive" role="alert">
               {invalidInputError || error}
@@ -216,11 +206,11 @@ export function TagsField({
         </div>
 
         {/* Dynamic Container for Tags and Suggestions */}
-        <div className={`flex flex-col ${layout.card.gap}`}>
+        <div className={`flex flex-col ${spacing.gap.md}`}>
           {/* Selected Tags Area */}
           {/* We keep toggle here to be close to selected tags, but visually distinct */}
           <div
-            className={`flex flex-wrap ${layout.tags.wrapGap} items-center min-h-8`}
+            className={`flex flex-wrap ${spacing.gap.sm} items-center min-h-8`}
           >
             {value.map((tag) => (
               <Badge
@@ -264,7 +254,7 @@ export function TagsField({
 
           {/* Suggestions Zone - Visually separated by being in a new flex block */}
           {showSuggestions && !isMaxReached && (
-            <div className={`flex flex-wrap ${layout.tags.wrapGap} pt-2 pb-1`}>
+            <div className={`flex flex-wrap ${spacing.gap.sm} pt-2 pb-1`}>
               {filteredSuggestions.map((suggestion) => (
                 <Badge
                   key={suggestion}

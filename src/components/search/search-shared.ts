@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 
-// Types
 export interface SearchPerson {
   id: string
   name: string
@@ -8,8 +7,7 @@ export interface SearchPerson {
   username?: string
 }
 
-// Demo data
-export const DEMO_PEOPLE: Array<SearchPerson> = [
+export const DEMO_PEOPLE: SearchPerson[] = [
   { id: '1', name: 'Sarah Johnson', username: '@sarahj' },
   { id: '2', name: 'Michael Chen', username: '@mchen' },
   { id: '3', name: 'Emma Wilson', username: '@emmaw' },
@@ -20,7 +18,6 @@ export const DEMO_PEOPLE: Array<SearchPerson> = [
   { id: '8', name: 'Robert Lee', username: '@robl' },
 ]
 
-// Utility functions
 export function getInitials(name: string): string {
   return name
     .split(' ')
@@ -33,18 +30,13 @@ export function getInitials(name: string): string {
 export function useSearchFilter(query: string) {
   const filteredPeople = useMemo(() => {
     if (!query) return []
-    const lowerQuery = query.toLowerCase()
+    const q = query.toLowerCase()
     return DEMO_PEOPLE.filter(
-      (person) =>
-        person.name.toLowerCase().includes(lowerQuery) ||
-        person.username?.toLowerCase().includes(lowerQuery),
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.username?.toLowerCase().includes(q),
     )
   }, [query])
 
-  const hasResults = filteredPeople.length > 0
-
-  return {
-    filteredPeople,
-    hasResults,
-  }
+  return { filteredPeople, hasResults: filteredPeople.length > 0 }
 }

@@ -1,14 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { MagnifyingGlassIcon, XIcon } from '@phosphor-icons/react'
+import { XIcon } from '@phosphor-icons/react'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-
-// Constants
-const SEARCH_LIMITS = {
-  maxLength: 100,
-  minLength: 1,
-} as const
+import { limits, icon, transition } from '@/lib/design'
 
 interface SearchInputProps {
   value: string
@@ -16,43 +10,24 @@ interface SearchInputProps {
   placeholder?: string
   autoFocus?: boolean
   className?: string
-  inputClassName?: string
-  showIcon?: boolean
-  size?: 'sm' | 'default' | 'lg'
   'aria-label'?: string
 }
 
-/**
- * SearchInput - Production-grade search input component
- *
- * Features:
- * - Input sanitization (strips dangerous chars)
- * - Max length enforcement
- * - Clear button with keyboard support
- * - Optional search icon
- * - Accessible with ARIA labels
- */
 export function SearchInput({
   value,
   onChange,
   placeholder = 'Search...',
   autoFocus = false,
   className,
-  inputClassName,
-  showIcon = false,
-  size = 'default',
   'aria-label': ariaLabel = 'Search',
 }: SearchInputProps) {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Sanitize input - remove potentially dangerous characters
   const sanitizeValue = useCallback((input: string): string => {
-    // Remove zero-width chars and control characters via char code filtering
     return input
       .split('')
       .filter((char) => {
         const code = char.charCodeAt(0)
-        // Allow printable ASCII and common Unicode, filter control chars and zero-width
         const isControlChar = code < 32 || code === 127
         const isZeroWidth =
           (code >= 0x200b && code <= 0x200d) ||
@@ -61,13 +36,12 @@ export function SearchInput({
         return !isControlChar && !isZeroWidth
       })
       .join('')
-      .slice(0, SEARCH_LIMITS.maxLength)
+      .slice(0, limits.search.max)
   }, [])
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const sanitized = sanitizeValue(e.target.value)
-      onChange(sanitized)
+      onChange(sanitizeValue(e.target.value))
     },
     [onChange, sanitizeValue],
   )
@@ -79,7 +53,6 @@ export function SearchInput({
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      // Clear on Escape when input has value
       if (e.key === 'Escape' && value) {
         e.preventDefault()
         handleClear()
@@ -88,29 +61,15 @@ export function SearchInput({
     [value, handleClear],
   )
 
-  // Auto-focus on mount if requested
   useEffect(() => {
     if (autoFocus) {
-      // Small delay to ensure DOM is ready
-      const timeout = setTimeout(() => inputRef.current?.focus(), 0)
-      return () => clearTimeout(timeout)
+      const id = requestAnimationFrame(() => inputRef.current?.focus())
+      return () => cancelAnimationFrame(id)
     }
   }, [autoFocus])
 
-  const iconSize = size === 'sm' ? 'size-3.5' : 'size-4'
-  const clearBtnSize = size === 'sm' ? 'icon-xs' : 'icon-sm'
-
   return (
     <div className={cn('relative flex-1', className)}>
-      {showIcon && (
-        <MagnifyingGlassIcon
-          className={cn(
-            iconSize,
-            'absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none',
-          )}
-          weight="bold"
-        />
-      )}
       <Input
         ref={inputRef}
         type="search"
@@ -118,29 +77,31 @@ export function SearchInput({
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className={cn(showIcon && 'pl-9', value && 'pr-9', inputClassName)}
-        size={size}
+        unstyled
+        className={cn(
+          'w-full h-9 bg-transparent rounded-lg px-3 py-1.5 text-sm outline-none placeholder:text-muted-foreground/72',
+          value && 'pr-8',
+        )}
         aria-label={ariaLabel}
-        maxLength={SEARCH_LIMITS.maxLength}
+        maxLength={limits.search.max}
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck={false}
       />
       {value && (
-        <Button
+        <button
           type="button"
-          variant="ghost"
-          size={clearBtnSize}
           onClick={handleClear}
-          className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-          aria-label="Clear search"
+          className={cn(
+            'absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded text-muted-foreground hover:text-foreground z-10',
+            transition.colors,
+          )}
+          aria-label="Clear"
         >
-          <XIcon className={iconSize} weight="bold" />
-        </Button>
+          <XIcon className={icon.xs} weight="bold" />
+        </button>
       )}
     </div>
   )
 }
-
-export { SEARCH_LIMITS }

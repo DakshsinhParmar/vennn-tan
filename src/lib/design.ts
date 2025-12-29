@@ -1,117 +1,91 @@
 /**
- * Unified Design System
+ * Design System - Single Source of Truth
  *
- * Centralized design tokens for consistent styling across the app.
- * Change values here to update the entire app's appearance.
- *
- * Follows DRY principle - single source of truth for all design decisions.
+ * Inspired by Notion's design principles:
+ * - Consistent spacing scale (4px base)
+ * - Semantic tokens over raw values
+ * - Composable patterns
+ * - Minimal, intentional interactions
  */
 
 // =============================================================================
-// SPACING & LAYOUT
+// SPACING SCALE (4px base unit)
 // =============================================================================
 
 export const spacing = {
-  /** Gaps between inline elements */
+  // Flex/Grid gaps (2/4/6/8 scale)
   gap: {
-    xs: 'gap-1',
-    sm: 'gap-2',
-    md: 'gap-3',
-    lg: 'gap-4',
-    xl: 'gap-6',
-    '2xl': 'gap-8',
+    xs: 'gap-1', // 4px
+    sm: 'gap-2', // 8px
+    md: 'gap-4', // 16px
+    lg: 'gap-6', // 24px
   },
-  /** Vertical spacing for stacked elements */
+  // Vertical stacks
   stack: {
-    xs: 'space-y-1',
-    sm: 'space-y-2',
-    md: 'space-y-3',
-    lg: 'space-y-4',
-    xl: 'space-y-6',
-    '2xl': 'space-y-8',
+    xs: 'space-y-1', // 4px
+    sm: 'space-y-2', // 8px
+    md: 'space-y-4', // 16px
+    lg: 'space-y-6', // 24px
   },
-  /** Padding presets */
-  padding: {
-    page: 'px-4',
-    section: 'p-4',
-    card: 'p-4',
-    item: 'py-4',
-    compact: 'py-3',
-  },
-  /** Section spacing presets (semantic aliases) */
+  // Semantic section spacing
   section: {
-    items: 'space-y-3',
-    fields: 'space-y-6',
-    page: 'space-y-8',
+    items: 'space-y-2', // Between list items
+    fields: 'space-y-4', // Between form fields
+    page: 'space-y-6', // Between page sections
+  },
+  // Padding
+  padding: {
+    page: 'px-4', // Page horizontal padding
+    card: 'p-4', // Card padding
+    section: 'py-4', // Section vertical padding
   },
 } as const
 
-/**
- * Layout tokens - semantic spacing for consistent UI patterns
- * Use these instead of inline spacing values
- */
+// =============================================================================
+// LAYOUT PATTERNS
+// =============================================================================
+
 export const layout = {
-  /** Card internal spacing */
+  // Card patterns
   card: {
-    gap: 'gap-3', // Between avatar and content
-    contentGap: 'gap-1.5', // Between title/tags/image
-    padding: 'py-3', // Vertical padding for list cards
+    gap: 'gap-2', // 8px between avatar and content
+    padding: 'py-2', // 8px vertical padding
   },
-  /** List item spacing */
-  list: {
-    gap: 'space-y-3', // Between list items (notifications, feed)
-    itemPadding: 'py-3', // Individual item padding
-  },
-  /** Page structure */
+  // Page patterns
   page: {
-    padding: 'px-4', // Horizontal page padding
-    sectionGap: 'space-y-6', // Between major sections
-    contentGap: 'space-y-4', // Between content blocks
-    bottomPadding: 'pb-20', // Bottom padding for mobile nav
+    bottomPadding: 'pb-20',
+    topPadding: 'pt-4',
   },
-  /** Header alignment */
+  // Header patterns (matches avatar height)
   header: {
-    height: 'h-9', // Standard header row height
-    gap: 'gap-2', // Between header elements
+    height: 'h-9', // 36px - matches md avatar
+    gap: 'gap-2', // 8px
   },
-  /** Avatar layouts */
+  // Avatar + text patterns
   avatar: {
-    gap: 'gap-3', // Avatar to content gap
-    textGap: 'gap-0.5', // Name to meta gap
+    textGap: 'gap-0.5', // 2px between name and subtext
   },
-  /** Form layouts */
-  form: {
-    fieldGap: 'space-y-6', // Between form fields
-    inputGap: 'gap-2', // Between input elements
-    sectionGap: 'gap-4', // Between form sections/cards
-  },
-  /** Tags/badges */
-  tags: {
-    gap: 'gap-1.5', // Between tag badges
-    wrapGap: 'gap-2', // When tags wrap to new line
+  // Timeline patterns
+  timeline: {
+    itemGap: 'gap-1', // 4px
+    contentGap: 'mt-2', // 8px
   },
 } as const
+
+// =============================================================================
+// CONTAINER WIDTHS
+// =============================================================================
 
 export const container = {
-  /** Max width constraints */
   maxWidth: {
-    xs: 'max-w-xs', // 320px
     sm: 'max-w-sm', // 384px
-    md: 'max-w-md', // 448px - Default for feed/forms
+    md: 'max-w-md', // 448px
     lg: 'max-w-lg', // 512px
     xl: 'max-w-xl', // 576px
-    '2xl': 'max-w-2xl', // 672px
-    '7xl': 'max-w-7xl', // 1280px - Post detail
   },
-  /** Fixed heights */
   height: {
     header: 'h-14',
-    bottomBar: 'h-14',
-  },
-  /** Sidebar widths */
-  sidebar: {
-    collapsed: 'w-16',
-    expanded: 'w-56',
+    bottomBar: 'h-16',
   },
 } as const
 
@@ -120,123 +94,161 @@ export const container = {
 // =============================================================================
 
 export const text = {
-  /** Page-level headings */
-  pageTitle: 'text-2xl font-bold tracking-tight',
-  /** Section headings */
-  sectionTitle: 'text-[17px] font-bold leading-snug tracking-tight',
-  /** Header/navigation titles */
-  headerTitle: 'text-base font-bold tracking-tight',
-  /** Card/component titles */
-  cardTitle: 'font-bold text-base leading-tight',
-  /** Dialog titles */
-  dialogTitle: 'font-heading text-lg leading-none',
-  /** Feed-specific */
-  feedName: 'text-[15px] font-bold text-foreground leading-tight',
-  feedMeta: 'text-[15px] text-muted-foreground',
-  postTitle: 'text-[17px] font-bold leading-snug text-foreground',
-  /** Body text */
-  body: 'text-[15px] text-foreground leading-normal',
-  bodyMuted: 'text-[15px] text-muted-foreground leading-normal',
-  /** Small text */
+  // Headings
+  pageTitle: 'text-xl font-semibold tracking-tight',
+  sectionTitle: 'text-lg font-semibold tracking-tight',
+  cardTitle: 'text-base font-semibold leading-normal',
+
+  // Body text
+  body: 'text-[15px] leading-relaxed',
+  bodyMuted: 'text-[15px] text-muted-foreground leading-relaxed',
+
+  // Small text
   sm: 'text-sm',
   smMuted: 'text-sm text-muted-foreground',
-  /** Extra small (caption) */
+  smMedium: 'text-sm font-medium',
+
+  // Extra small text
   xs: 'text-xs',
   xsMuted: 'text-xs text-muted-foreground',
-  /** Labels */
+
+  // Labels
   label: 'text-sm font-medium',
-  /** Brand */
-  brand: 'font-bold text-lg tracking-tight',
-  // Semantic aliases for backward compatibility
-  small: 'text-sm',
-  smallMuted: 'text-sm text-muted-foreground',
-  caption: 'text-xs',
-  captionMuted: 'text-xs text-muted-foreground',
+
+  // Truncation helpers
+  truncate: 'truncate',
+  lineClamp2: 'line-clamp-2',
+  lineClamp3: 'line-clamp-3',
 } as const
 
 // =============================================================================
-// ICONS
+// ICON SIZES
 // =============================================================================
 
 export const icon = {
-  xs: 'size-4',
-  sm: 'size-5',
-  md: 'size-6',
-  lg: 'size-8',
-  xl: 'size-10',
+  xs: 'size-4', // 16px
+  sm: 'size-5', // 20px
+  md: 'size-6', // 24px
+  lg: 'size-8', // 32px
 } as const
 
 // =============================================================================
-// ELEMENT STYLES
-// =============================================================================
-
-/**
- * Pre-composed element styles for consistent UI patterns.
- * Consolidates duplicate inline classes from across the codebase.
- */
-export const element = {
-  /** Underline tab list container */
-  tabList: 'w-full flex h-14 border-none px-0',
-  /** Underline tab trigger */
-  tabTrigger:
-    'flex-1 h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none',
-  /** Image card container */
-  imageCard: 'rounded-xl border border-border/60 bg-muted/20 overflow-hidden',
-} as const
-
-// =============================================================================
-// COMPONENTS
+// COMPONENT PATTERNS
 // =============================================================================
 
 export const component = {
-  /** Interactive element sizes */
-  button: {
-    touch: 'min-h-11 min-w-11', // Touch-friendly minimum
-  },
-  /** Avatar sizes */
+  // Avatar sizes
   avatar: {
-    xs: 'size-6',
-    sm: 'size-8',
-    md: 'size-9',
-    lg: 'size-20',
+    xs: 'size-6', // 24px
+    sm: 'size-8', // 32px
+    md: 'size-9', // 36px
+    lg: 'size-16', // 64px
+    xl: 'size-20', // 80px
   },
-  /** Form field heights */
+  // Button patterns
+  button: {
+    icon: 'size-8',
+    iconSm: 'size-7',
+    iconLg: 'size-9',
+  },
+  // Input patterns
   input: {
-    sm: 'h-8',
-    md: 'h-9',
-    lg: 'h-10',
+    height: 'h-9',
+    heightLg: 'h-10',
   },
 } as const
 
 // =============================================================================
-// TRANSITIONS
+// ELEMENT PATTERNS (Compound components)
+// =============================================================================
+
+export const element = {
+  // Tab patterns
+  tabList: 'w-full flex h-12 border-none px-0',
+  tabTrigger:
+    'flex-1 h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:shadow-none transition-colors',
+
+  // Image card
+  imageCard: 'rounded-lg border border-border/50 overflow-hidden',
+
+  // Link item (for profile links, timeline links)
+  linkItem:
+    'group flex items-center gap-2 text-sm text-foreground/80 hover:text-foreground transition-colors cursor-pointer',
+  linkIcon:
+    'flex items-center justify-center size-5 rounded-md bg-muted/50 text-muted-foreground group-hover:bg-muted group-hover:text-foreground transition-colors',
+
+  // Divider
+  divider: 'border-t border-border/50',
+} as const
+
+// =============================================================================
+// TRANSITIONS & ANIMATIONS
 // =============================================================================
 
 export const transition = {
-  fast: 'transition-all duration-150',
-  normal: 'transition-all duration-200',
-  slow: 'transition-all duration-300',
-  colors: 'transition-colors duration-200',
-  opacity: 'transition-opacity duration-200',
-  transform: 'transition-transform duration-200',
+  colors: 'transition-colors duration-150',
+  all: 'transition-all duration-150',
+  transform: 'transition-transform duration-150',
+  opacity: 'transition-opacity duration-150',
+  fast: 'duration-100',
+  normal: 'duration-150',
+  slow: 'duration-200',
 } as const
 
 // =============================================================================
-// Z-INDEX LAYERS
+// INTERACTION STATES
+// =============================================================================
+
+export const interaction = {
+  // Cursor states
+  cursor: {
+    pointer: 'cursor-pointer',
+    default: 'cursor-default',
+    notAllowed: 'cursor-not-allowed',
+    wait: 'cursor-wait',
+    text: 'cursor-text',
+  },
+  // Hover states
+  hover: {
+    opacity: 'hover:opacity-80',
+    bg: 'hover:bg-accent',
+    bgSubtle: 'hover:bg-muted/50',
+    scale: 'hover:scale-[1.02]',
+  },
+  // Active states
+  active: {
+    scale: 'active:scale-[0.98]',
+    opacity: 'active:opacity-90',
+  },
+  // Focus states
+  focus: {
+    ring: 'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
+    outline: 'focus-visible:outline-none',
+  },
+  // Disabled states
+  disabled: {
+    opacity: 'disabled:opacity-50',
+    cursor: 'disabled:cursor-not-allowed',
+    events: 'disabled:pointer-events-none',
+  },
+} as const
+
+// =============================================================================
+// Z-INDEX SCALE
 // =============================================================================
 
 export const zIndex = {
   base: 'z-0',
-  dropdown: 'z-10',
-  sticky: 'z-20',
-  overlay: 'z-30',
-  modal: 'z-40',
-  popover: 'z-50',
-  toast: 'z-[100]',
+  dropdown: 'z-50',
+  sticky: 'z-50',
+  modal: 'z-60',
+  popover: 'z-70',
+  tooltip: 'z-80',
+  toast: 'z-90',
 } as const
 
 // =============================================================================
-// FORM LIMITS (centralized validation constraints)
+// FORM VALIDATION LIMITS
 // =============================================================================
 
 export const limits = {
@@ -251,23 +263,35 @@ export const limits = {
 } as const
 
 // =============================================================================
-// UNIFIED EXPORT (for backward compatibility and convenience)
+// COMPOSED PATTERNS (Common combinations)
 // =============================================================================
 
-export const design = {
-  spacing,
-  layout,
-  container,
-  text,
-  icon,
-  component,
-  transition,
-  zIndex,
-  limits,
-} as const
+export const patterns = {
+  // Page container
+  pageContainer: 'w-full max-w-md mx-auto pb-20',
 
-// Type exports
-export type SpacingKey = keyof typeof spacing
-export type ContainerKey = keyof typeof container
-export type TextKey = keyof typeof text
-export type IconKey = keyof typeof icon
+  // Card base
+  card: 'rounded-lg border border-border bg-card',
+
+  // Clickable card
+  clickableCard:
+    'rounded-lg border border-border bg-card hover:bg-accent/50 transition-colors cursor-pointer',
+
+  // Form field wrapper
+  fieldWrapper: 'w-full space-y-2',
+
+  // Flex row with gap
+  row: 'flex items-center gap-2',
+
+  // Flex column with gap
+  column: 'flex flex-col gap-2',
+
+  // Center content
+  center: 'flex items-center justify-center',
+
+  // Truncate text
+  truncate: 'min-w-0 truncate',
+
+  // Screen reader only
+  srOnly: 'sr-only',
+} as const

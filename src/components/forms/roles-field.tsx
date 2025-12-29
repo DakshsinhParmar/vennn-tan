@@ -133,27 +133,19 @@ export function RolesField({
           return (
             <div key={index} className="space-y-1">
               <div className="flex w-full items-center gap-2">
-                <div className="relative flex-1">
-                  <Input
-                    ref={isLast ? focusNewInput : undefined}
-                    value={roleItem.role}
-                    onChange={(e) => updateRole(index, e.target.value)}
-                    onBlur={onBlur}
-                    placeholder={rolePlaceholder}
-                    className="w-full pe-14"
-                    size="lg"
-                    variant={showInputError ? 'destructive' : 'default'}
-                    aria-invalid={showInputError ? true : undefined}
-                    maxLength={maxRoleLength}
-                  />
-                  <div
-                    aria-live="polite"
-                    className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-muted-foreground text-xs tabular-nums"
-                    role="status"
-                  >
-                    {roleItem.role.length}/{maxRoleLength}
-                  </div>
-                </div>
+                <Input
+                  ref={isLast ? focusNewInput : undefined}
+                  value={roleItem.role}
+                  onChange={(e) => updateRole(index, e.target.value)}
+                  onBlur={onBlur}
+                  placeholder={rolePlaceholder}
+                  className="w-full flex-1"
+                  size="lg"
+                  variant={showInputError ? 'destructive' : 'default'}
+                  aria-invalid={showInputError ? true : undefined}
+                  maxLength={maxRoleLength}
+                  charCount={roleItem.role.length}
+                />
                 <Button
                   type="button"
                   variant="ghost"

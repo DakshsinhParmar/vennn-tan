@@ -1,6 +1,8 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
+import { UserAvatar } from '@/components/shared'
 import { cn } from '@/lib/utils'
+import { LinkSimple } from '@phosphor-icons/react'
+import { spacing, text, element } from '@/lib/design'
 
 interface UserLink {
   url: string
@@ -24,15 +26,17 @@ export function ProfileInfo({ user, className }: ProfileInfoProps) {
   const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
   return (
-    <div className={cn('flex flex-col gap-3', className)}>
-      <div className="flex items-center gap-4">
-        <Avatar className="h-20 w-20">
-          <AvatarImage src={user.avatar} alt={user.name} />
-          <AvatarFallback>{user.initials}</AvatarFallback>
-        </Avatar>
-        <div className="flex flex-col justify-center gap-1">
-          <h2 className="text-2xl font-semibold tracking-tight">{user.name}</h2>
-          <div className="flex gap-2">
+    <div className={cn('flex flex-col', spacing.gap.md, className)}>
+      <div className={cn('flex items-center', spacing.gap.lg)}>
+        <UserAvatar
+          name={user.name}
+          avatar={user.avatar}
+          initials={user.initials}
+          size="xl"
+        />
+        <div className={cn('flex flex-col justify-center', spacing.gap.xs)}>
+          <h2 className={text.pageTitle}>{user.name}</h2>
+          <div className={cn('flex', spacing.gap.sm)}>
             {user.intent.map((tag) => (
               <Badge
                 key={tag}
@@ -47,16 +51,21 @@ export function ProfileInfo({ user, className }: ProfileInfoProps) {
       </div>
 
       {user.links.length > 0 && (
-        <div className="flex flex-col gap-1 mt-1">
+        <div className={cn('flex flex-col gap-1.5', spacing.padding.section)}>
           {user.links.map((link, i) => (
             <a
               key={i}
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-medium hover:underline underline-offset-4 transition-colors"
+              className={element.linkItem}
             >
-              {new URL(link.url).hostname}
+              <div className={element.linkIcon}>
+                <LinkSimple weight="bold" className="size-3.5" />
+              </div>
+              <span className={text.smMedium}>
+                {new URL(link.url).hostname}
+              </span>
             </a>
           ))}
         </div>

@@ -1,27 +1,18 @@
-/**
- * Library Exports
- *
- * Central export point for all lib utilities.
- * Import from '@/lib' for convenience.
- */
-
-// Utilities
 export { cn } from './utils'
-
-// Design system (primary - use for new code)
 export {
-  design,
   spacing,
+  layout,
   container,
   text,
   icon,
+  element,
   component,
   transition,
+  interaction,
   zIndex,
   limits,
+  patterns,
 } from './design'
-
-// Theme
 export {
   getStoredUserTheme,
   setStoredTheme,

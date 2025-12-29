@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
-import { layout } from '@/lib/design'
 
 interface MainContentProps {
   children?: ReactNode
@@ -8,12 +7,6 @@ interface MainContentProps {
   className?: string
 }
 
-/**
- * MainContent - Scrollable content area
- *
- * Mobile: scrolls with document, padding at bottom for bottom bar
- * Desktop: fixed position, centered with left offset for sidebar
- */
 export function MainContent({
   children,
   variant,
@@ -21,20 +14,12 @@ export function MainContent({
 }: MainContentProps) {
   if (variant === 'mobile') {
     return (
-      <main className={cn(`min-h-dvh pb-16 ${layout.page.padding}`, className)}>
-        {children}
-      </main>
+      <main className={cn('min-h-dvh pb-16 px-4', className)}>{children}</main>
     )
   }
 
-  // Desktop variant - content centered absolutely on viewport
   return (
-    <main
-      className={cn(
-        `absolute inset-0 overflow-y-auto ${layout.page.padding}`,
-        className,
-      )}
-    >
+    <main className={cn('absolute inset-0 overflow-y-auto px-4', className)}>
       <div className="flex min-h-full justify-center">
         <div className="w-full">{children}</div>
       </div>

@@ -13,7 +13,6 @@ export const Route = createFileRoute('/profile')({
   component: ProfilePage,
 })
 
-// Current logged-in user ID (in real app, this would come from auth context)
 const CURRENT_USER_ID = 'current-user'
 
 const DEMO_USER = {
@@ -79,31 +78,28 @@ function ProfilePage() {
   const navigate = useNavigate()
 
   const handleDeletePost = (postId: string | number) => {
-    // In real app, this would call an API to delete the post
     toastManager.add({
       type: 'success',
       title: 'Post deleted',
       description: 'Your post has been deleted.',
     })
-    console.log('Delete post:', postId)
+    if (import.meta.env.DEV) console.log('Delete post:', postId)
   }
 
   return (
     <div
       className={`w-full ${container.maxWidth.md} mx-auto ${layout.page.bottomPadding}`}
     >
-      <PageHeader title="Profile" className="mb-8">
+      <PageHeader title="Profile" className="mb-4">
         <Button onClick={() => navigate({ to: '/edit-profile' })}>Edit</Button>
       </PageHeader>
 
-      {/* Profile Info */}
-      <ProfileInfo user={DEMO_USER} className="mb-6" />
+      <ProfileInfo user={DEMO_USER} className="mb-4" />
 
-      {/* Tabs Section */}
       <Tabs defaultValue="posts" className="w-full">
         <TabsList
           variant="underline"
-          className={`${element.tabList} rounded-none bg-transparent mb-6 border-b`}
+          className={`${element.tabList} rounded-none bg-transparent border-b`}
         >
           <TabsTrigger value="posts" className={element.tabTrigger}>
             Posts
@@ -113,7 +109,7 @@ function ProfilePage() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="posts">
+        <TabsContent value="posts" className="pt-2">
           <div className={spacing.section.items}>
             {DEMO_POSTS.map((post) => {
               const userRole: UserPostRole =
@@ -135,7 +131,7 @@ function ProfilePage() {
           </div>
         </TabsContent>
 
-        <TabsContent value="collaborations">
+        <TabsContent value="collaborations" className="pt-2">
           <CollaborationWrap />
         </TabsContent>
       </Tabs>

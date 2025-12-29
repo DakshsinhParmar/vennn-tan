@@ -7,7 +7,6 @@
 // Image upload
 export { ProfileImageUpload } from './profile-image-upload'
 export { MultiImageUpload } from './multi-image-upload'
-export { ImageUploadField } from './image-upload-field'
 
 // Array fields
 export { TagsField } from './tags-field'

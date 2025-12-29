@@ -3,7 +3,7 @@ import type { PostFormData } from '@/lib/form'
 import { PageHeader } from '@/components/layout/page-header'
 import { Button } from '@/components/ui/button'
 import { PostForm, UnsavedChangesDialog } from '@/components/forms'
-import { container } from '@/lib/design'
+import { container, layout, icon } from '@/lib/design'
 import { SparkleIcon, CoffeeIcon } from '@phosphor-icons/react'
 import { toastManager } from '@/components/ui/toast'
 import { useFormPage } from '@/hooks/use-form-page'
@@ -44,7 +44,6 @@ function EditPostPage() {
     blocker,
   } = useFormPage<PostFormData>({
     onSubmit: async (data) => {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000))
       if (import.meta.env.DEV) {
         console.log('Post updated:', { id, ...data })
@@ -66,6 +65,10 @@ function EditPostPage() {
     },
   })
 
+  const PostTypeIcon =
+    MOCK_POST_DATA.postType === 'build' ? SparkleIcon : CoffeeIcon
+  const postTypeLabel = MOCK_POST_DATA.postType === 'build' ? 'Build' : 'Social'
+
   return (
     <div className={`mx-auto w-full ${container.maxWidth.md} min-h-full`}>
       <PageHeader
@@ -74,22 +77,22 @@ function EditPostPage() {
         titleSuffix={
           <span
             className="inline-flex items-center text-muted-foreground"
-            title={MOCK_POST_DATA.postType === 'build' ? 'Build' : 'Social'}
+            title={postTypeLabel}
           >
-            {MOCK_POST_DATA.postType === 'build' ? (
-              <SparkleIcon weight="fill" className="size-4" />
-            ) : (
-              <CoffeeIcon weight="fill" className="size-4" />
-            )}
+            <PostTypeIcon weight="fill" className={icon.xs} />
           </span>
         }
         primaryAction={
-          <Button onClick={triggerSubmit} disabled={isSubmitting}>
+          <Button
+            onClick={triggerSubmit}
+            disabled={isSubmitting}
+            data-loading={isSubmitting}
+          >
             {isSubmitting ? 'Saving...' : 'Save'}
           </Button>
         }
       />
-      <div className="py-4">
+      <div className={layout.page.topPadding}>
         <PostForm
           mode="edit"
           initialValues={MOCK_POST_DATA}

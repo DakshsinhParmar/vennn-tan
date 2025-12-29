@@ -6,10 +6,11 @@ import {
   TrashIcon,
   PencilSimpleIcon,
   ArrowsClockwiseIcon,
+  LinkSimple,
 } from '@phosphor-icons/react'
 import { PageHeader } from '@/components/layout/page-header'
 import { PostCard } from '@/components/feed/post-card'
-import { UserAvatar } from '@/components/shared'
+import { UserAvatar, ItemRow } from '@/components/shared'
 import { Menu, MenuItem, MenuPopup, MenuTrigger } from '@/components/ui/menu'
 import {
   Dialog,
@@ -23,13 +24,12 @@ import {
 import { RadioGroup, Radio } from '@/components/ui/radio-group'
 import { Button } from '@/components/ui/button'
 import { Field, FieldLabel, FieldError } from '@/components/ui/field'
-import { text, container, spacing, layout } from '@/lib/design'
+import { text, container, spacing } from '@/lib/design'
 import { toastManager } from '@/components/ui/toast'
 import {
   Timeline,
   TimelineItem,
   TimelineHeader,
-  TimelineTitle,
   TimelineContent,
   TimelineIndicator,
   TimelineSeparator,
@@ -536,7 +536,6 @@ function PostPage() {
 
   const confirmDeleteTimelineItem = useCallback(() => {
     if (!deleteTarget) return
-    // In real app: API call
     toastManager.add({
       type: 'success',
       title: 'Update deleted',
@@ -544,21 +543,18 @@ function PostPage() {
     })
     setShowDeleteDialog(false)
     setDeleteTarget(null)
-    // Update local state...
   }, [deleteTarget])
 
   const handleTimelineSubmit = useCallback(
     (data: TimelineEntryFormData) => {
-      // In real app: API call
       const message = editingTimelineItem ? 'Timeline updated' : 'Update added'
       toastManager.add({
         type: 'success',
         title: message,
         description: 'Your timeline has been updated.',
       })
-
       setShowTimelineDialog(false)
-      console.log('Timeline entry submitted:', data)
+      if (import.meta.env.DEV) console.log('Timeline entry submitted:', data)
     },
     [editingTimelineItem],
   )
@@ -588,11 +584,10 @@ function PostPage() {
 
   const joinButtonProps = getJoinButtonProps()
 
-  // Menu for PageHeader
   const headerMenu = (
     <Menu>
       <MenuTrigger
-        render={(props) => <Button variant="ghost" size="icon" {...props} />}
+        render={(props) => <Button variant="outline" size="icon" {...props} />}
       >
         <DotsThreeIcon weight="bold" />
         <span className="sr-only">More options</span>
@@ -665,7 +660,7 @@ function PostPage() {
         </div>
 
         {/* Details Section */}
-        <div className={`${spacing.stack.xl}`}>
+        <div className={`${spacing.stack.lg}`}>
           {/* Description & Tags */}
           <div className={spacing.stack.md}></div>
 
@@ -673,25 +668,29 @@ function PostPage() {
           {post.links.length > 0 && (
             <div className={spacing.stack.sm}>
               <h3 className={text.label}>Links</h3>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1.5">
                 {post.links.map((link, index) => (
                   <a
                     key={index}
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm font-medium hover:underline underline-offset-4 transition-colors"
+                    className="group flex items-center gap-2 text-sm text-foreground/80 hover:text-foreground transition-colors"
                   >
-                    {link.url
-                      .replace(/^https?:\/\/(www\.)?/, '')
-                      .replace(/\/$/, '')}
+                    <div className="flex items-center justify-center h-5 w-5 rounded-md bg-muted/50 text-muted-foreground group-hover:bg-muted group-hover:text-foreground transition-colors">
+                      <LinkSimple weight="bold" className="h-3.5 w-3.5" />
+                    </div>
+                    <span className="font-medium">
+                      {link.url
+                        .replace(/^https?:\/\/(www\.)?/, '')
+                        .replace(/\/$/, '')}
+                    </span>
                   </a>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Timeline */}
           {post.timeline && post.timeline.length > 0 && (
             <div className={spacing.stack.sm}>
               <div className="flex items-center justify-between">
@@ -709,63 +708,8 @@ function PostPage() {
                     const canEdit = canEditTimelineEntry(userRole, isOwnEntry)
                     return (
                       <TimelineItem key={index} step={index + 1}>
-                        <TimelineHeader className="flex justify-between items-center min-h-9">
+                        <TimelineHeader>
                           <TimelineSeparator />
-                          <div className="flex flex-col flex-1 min-w-0">
-                            <TimelineTitle className="leading-none">
-                              <div
-                                className={`flex flex-col justify-center leading-none ${layout.avatar.textGap}`}
-                              >
-                                <span className="font-medium text-sm truncate leading-none text-foreground">
-                                  {event.actor.name}
-                                </span>
-                                <span className="text-muted-foreground text-xs font-normal leading-none block">
-                                  {event.action.charAt(0).toUpperCase() +
-                                    event.action.slice(1)}{' '}
-                                  • {event.date}
-                                </span>
-                              </div>
-                            </TimelineTitle>
-                          </div>
-
-                          {/* Edit/Delete Menu for Timeline Item */}
-                          {canEdit && (
-                            <Menu>
-                              <MenuTrigger
-                                render={(props) => (
-                                  <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    {...props}
-                                    className="h-8 w-8"
-                                  />
-                                )}
-                              >
-                                <DotsThreeIcon weight="bold" />
-                                <span className="sr-only">Event options</span>
-                              </MenuTrigger>
-                              <MenuPopup align="end">
-                                <MenuItem
-                                  onClick={() =>
-                                    handleEditTimelineItemClick(event)
-                                  }
-                                >
-                                  <PencilSimpleIcon className="size-4" />
-                                  Edit update
-                                </MenuItem>
-                                <MenuItem
-                                  variant="destructive"
-                                  onClick={() =>
-                                    handleDeleteTimelineItemClick(event)
-                                  }
-                                >
-                                  <TrashIcon className="size-4" />
-                                  Delete update
-                                </MenuItem>
-                              </MenuPopup>
-                            </Menu>
-                          )}
-
                           <TimelineIndicator className="border-none bg-background">
                             <UserAvatar
                               name={event.actor.name}
@@ -774,22 +718,82 @@ function PostPage() {
                               size="md"
                             />
                           </TimelineIndicator>
+                          <ItemRow
+                            left={null}
+                            primary={
+                              <span className="font-medium text-sm text-foreground">
+                                {event.actor.name}
+                              </span>
+                            }
+                            secondary={
+                              event.action.charAt(0).toUpperCase() +
+                              event.action.slice(1)
+                            }
+                            tertiary={event.date}
+                            action={
+                              canEdit ? (
+                                <Menu>
+                                  <MenuTrigger
+                                    render={(props) => (
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        {...props}
+                                        className="h-8 w-8"
+                                      />
+                                    )}
+                                  >
+                                    <DotsThreeIcon weight="bold" />
+                                    <span className="sr-only">
+                                      Event options
+                                    </span>
+                                  </MenuTrigger>
+                                  <MenuPopup align="end">
+                                    <MenuItem
+                                      onClick={() =>
+                                        handleEditTimelineItemClick(event)
+                                      }
+                                    >
+                                      <PencilSimpleIcon className="size-4" />
+                                      Edit
+                                    </MenuItem>
+                                    <MenuItem
+                                      variant="destructive"
+                                      onClick={() =>
+                                        handleDeleteTimelineItemClick(event)
+                                      }
+                                    >
+                                      <TrashIcon className="size-4" />
+                                      Delete
+                                    </MenuItem>
+                                  </MenuPopup>
+                                </Menu>
+                              ) : undefined
+                            }
+                            className="flex-1"
+                          />
                         </TimelineHeader>
-                        <TimelineContent className="mt-2 rounded-lg border px-4 py-3 text-foreground bg-muted/20">
+                        <TimelineContent className="mt-2 rounded-lg border px-3 py-2.5 text-sm text-foreground/90 bg-card/50">
                           {event.description}
                           {event.links && event.links.length > 0 && (
-                            <div className={`flex flex-col gap-1 mt-2`}>
+                            <div className="flex flex-col gap-1 mt-2">
                               {event.links.map((link, linkIndex) => (
                                 <a
                                   key={linkIndex}
                                   href={link.url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-sm font-medium hover:underline underline-offset-4 transition-colors"
+                                  className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
                                 >
-                                  {link.url
-                                    .replace(/^https?:\/\/(www\.)?/, '')
-                                    .replace(/\/$/, '')}
+                                  <LinkSimple
+                                    weight="bold"
+                                    className="size-3.5"
+                                  />
+                                  <span>
+                                    {link.url
+                                      .replace(/^https?:\/\/(www\.)?/, '')
+                                      .replace(/\/$/, '')}
+                                  </span>
                                 </a>
                               ))}
                             </div>

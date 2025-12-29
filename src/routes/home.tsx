@@ -1,10 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { LifebuoyIcon } from '@phosphor-icons/react'
-import { PageHeader } from '@/components/layout/page-header'
 import { PostCard } from '@/components/feed/post-card'
-import { Button } from '@/components/ui/button'
+import { FeedHeader } from '@/components/layout/mobile-header'
 import { toastManager } from '@/components/ui/toast'
-import { container, layout, spacing, icon } from '@/lib/design'
+import { container, layout, spacing } from '@/lib/design'
 import type { UserPostRole } from '@/lib/types'
 
 export const Route = createFileRoute('/home')({
@@ -13,8 +11,6 @@ export const Route = createFileRoute('/home')({
 
 const CURRENT_USER_ID = 'current-user'
 
-// Reusing demo data from profile for the "global feed" simulation
-// All variants: image+desc, image only, no image+desc, no image+no desc
 const DEMO_POSTS = [
   // === OWN POSTS (owner menu: Edit/Delete) ===
   // 1. With image + description
@@ -156,37 +152,17 @@ function HomePage() {
       title: 'Post deleted',
       description: 'Your post has been deleted.',
     })
-    console.log('Delete post:', postId)
+    if (import.meta.env.DEV) console.log('Delete post:', postId)
   }
 
   return (
     <div
       className={`w-full ${container.maxWidth.md} mx-auto ${layout.page.bottomPadding}`}
     >
-      {/* Mobile-only Header */}
-      <PageHeader
-        className="sm:hidden"
-        titleSuffix={
-          <span className="tracking-tighter font-semibold text-xl">vennn</span>
-        }
-      >
-        <Button
-          variant="ghost"
-          size="icon"
-          render={
-            <a
-              href="https://vennn.featurebase.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-            />
-          }
-        >
-          <LifebuoyIcon className={icon.md} weight="regular" />
-        </Button>
-      </PageHeader>
-
-      {/* Feed Content */}
-      <div className={`mt-4 ${spacing.section.items}`}>
+      <div className="sm:hidden sticky top-0 z-50 -mx-4">
+        <FeedHeader />
+      </div>
+      <div className={`pt-3 ${spacing.section.items}`}>
         {DEMO_POSTS.map((post) => {
           const userRole: UserPostRole =
             post.user.id === CURRENT_USER_ID ? 'owner' : 'viewer'

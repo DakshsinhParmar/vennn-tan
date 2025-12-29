@@ -41,7 +41,7 @@ export function PageHeader({
     >
       <div
         className={cn(
-          'flex h-14 items-center justify-between',
+          'flex h-12 items-center justify-between',
           !children && !title && !primaryAction && !secondaryAction
             ? 'hidden'
             : '',
@@ -51,9 +51,9 @@ export function PageHeader({
           {showBackButton && (
             <Button
               onClick={() => window.history.back()}
-              variant="ghost"
+              variant="outline"
               size="icon"
-              className=""
+              className="hover:bg-background hover:border-border"
               aria-label="Go back"
             >
               <ArrowLeftIcon weight="bold" />
@@ -62,10 +62,7 @@ export function PageHeader({
           <div className="flex items-center gap-2 min-w-0">
             {title && (
               <h1
-                className={cn(
-                  'text-base font-bold tracking-tight truncate',
-                  titleClassName,
-                )}
+                className={cn('text-sm font-medium truncate', titleClassName)}
               >
                 {title}
               </h1>

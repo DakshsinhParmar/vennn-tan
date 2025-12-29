@@ -1,20 +1,12 @@
-/**
- * SearchPanel - Unified search component for both mobile and desktop
- *
- * Uses CSS to handle responsive behavior instead of duplicating components.
- * Desktop: Sidebar panel next to navigation
- * Mobile: Full-screen overlay
- */
 import { useEffect, useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from '@tanstack/react-router'
-import { XIcon } from '@phosphor-icons/react'
+import { ArrowLeftIcon } from '@phosphor-icons/react'
 import { SearchInput } from './search-input'
 import { Button } from '@/components/ui/button'
 import { useSearchFilter } from './search-shared'
-import { UserAvatar } from '@/components/shared'
-import { cn } from '@/lib/utils'
-import { spacing, container, icon } from '@/lib/design'
+import { UserAvatar, ItemRow } from '@/components/shared'
+import { container, icon } from '@/lib/design'
 
 interface SearchPanelProps {
   open: boolean
@@ -31,12 +23,10 @@ export function SearchPanel({ open, onClose }: SearchPanelProps) {
     navigate({ to: '/profile' })
   }, [onClose, navigate])
 
-  // Reset on close
   useEffect(() => {
     if (!open) setQuery('')
   }, [open])
 
-  // Escape key handler
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
@@ -46,7 +36,6 @@ export function SearchPanel({ open, onClose }: SearchPanelProps) {
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
 
-  // Mobile: handle back button
   useEffect(() => {
     if (!open) return
     window.history.pushState({ searchOpen: true }, '')
@@ -62,63 +51,60 @@ export function SearchPanel({ open, onClose }: SearchPanelProps) {
     : 'No results found.'
 
   const results = (
-    <div className={spacing.stack.xs}>
+    <div className="space-y-1">
       {filteredPeople.map((person) => (
-        <Button
+        <button
           key={person.id}
-          variant="ghost"
           onClick={() => handleNavigate()}
-          className="w-full justify-start gap-2 h-auto py-2 px-2 sm:px-2"
+          className="w-full text-left px-2 py-1.5 rounded-md hover:bg-accent transition-colors"
         >
-          <UserAvatar name={person.name} avatar={person.avatar} size="sm" />
-          <div className="flex flex-col items-start min-w-0">
-            <span className="text-sm font-medium truncate">{person.name}</span>
-            {person.username && (
-              <span className="text-xs text-muted-foreground sm:hidden">
-                {person.username}
-              </span>
-            )}
-          </div>
-        </Button>
+          <ItemRow
+            left={
+              <UserAvatar name={person.name} avatar={person.avatar} size="sm" />
+            }
+            primary={person.name}
+            secondary={person.username ? `@${person.username}` : undefined}
+          />
+        </button>
       ))}
     </div>
   )
 
   return createPortal(
     <>
-      {/* Desktop: Backdrop */}
+      {/* Desktop backdrop */}
       <div
-        className="fixed inset-0 hidden sm:block z-55"
+        className="fixed inset-0 hidden lg:block z-55 bg-black/5"
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* Mobile: Full screen */}
+      {/* Mobile only: full screen overlay */}
       <div
-        className="fixed inset-0 z-60 bg-background flex flex-col sm:hidden"
+        className="fixed inset-0 z-60 bg-background flex flex-col lg:hidden"
         role="search"
         aria-label="Search"
       >
         <div
-          className={`flex items-center ${container.height.header} px-2 shrink-0 ${spacing.gap.sm}`}
+          className={`flex items-center ${container.height.header} px-2 shrink-0 gap-2`}
         >
-          <SearchInput
-            value={query}
-            onChange={setQuery}
-            placeholder="Search..."
-            autoFocus
-            inputClassName="h-9"
-          />
           <Button
             variant="ghost"
             size="icon"
             onClick={onClose}
-            aria-label="Close"
+            aria-label="Back"
+            className="shrink-0"
           >
-            <XIcon className={icon.sm} weight="bold" />
+            <ArrowLeftIcon className={icon.sm} weight="bold" />
           </Button>
+          <SearchInput
+            value={query}
+            onChange={setQuery}
+            placeholder="Search people..."
+            autoFocus
+          />
         </div>
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto px-2 pb-4">
           {!hasResults ? (
             <p className="py-12 text-center text-sm text-muted-foreground">
               {emptyMessage}
@@ -129,27 +115,21 @@ export function SearchPanel({ open, onClose }: SearchPanelProps) {
         </div>
       </div>
 
-      {/* Desktop: Side panel */}
+      {/* Desktop only: side panel */}
       <aside
-        className={cn(
-          'fixed left-16 border-[0.5px] top-1 bottom-1 rounded-xl hidden sm:flex flex-col bg-background z-60',
-          container.sidebar.expanded,
-        )}
+        className="fixed left-16 top-0 bottom-0 w-72 hidden lg:flex flex-col bg-sidebar border-r border-sidebar-border z-60"
         role="search"
         aria-label="Search panel"
       >
-        <div
-          className={`flex items-center ${spacing.gap.sm} ${container.height.header} px-2 shrink-0`}
-        >
+        <div className="flex items-center h-14 px-3 shrink-0">
           <SearchInput
             value={query}
             onChange={setQuery}
             placeholder="Search..."
             autoFocus
-            inputClassName="h-9"
           />
         </div>
-        <div className="flex-1 overflow-y-auto overscroll-contain p-3">
+        <div className="flex-1 overflow-y-auto overscroll-contain px-2 pb-2">
           {!hasResults ? (
             <p className="py-8 text-center text-sm text-muted-foreground">
               {emptyMessage}

@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@plugin "@toolwind/corner-shape";
 
 @custom-variant dark (&:is(.dark *));
 @theme inline {
@@ -79,9 +78,9 @@
   --destructive: oklch(0.55 0.22 28);
   --destructive-foreground: oklch(0.99 0.003 75);
 
-  /* Ghost borders - minimal interruption */
-  --border: oklch(0.93 0.005 70);
-  --input: oklch(0.93 0.005 70);
+  /* Visible borders - clear definition */
+  --border: oklch(0.88 0.008 70);
+  --input: oklch(0.85 0.01 70);
 
   /* Zesty focus ring - pure tangerine energy */
   --ring: oklch(0.7 0.2 55);
@@ -137,9 +136,9 @@
   --destructive: oklch(0.6 0.24 25);
   --destructive-foreground: oklch(0.98 0.005 75);
 
-  /* Defined dark borders */
-  --border: oklch(0.3 0.018 48);
-  --input: oklch(0.3 0.018 48);
+  /* Visible dark borders */
+  --border: oklch(0.35 0.02 48);
+  --input: oklch(0.38 0.022 50);
 
   /* Neon tangerine ring */
   --ring: oklch(0.75 0.22 52);
@@ -173,7 +172,64 @@
     letter-spacing: -0.011em;
   }
 
-  /* Hide scrollbar for dialog content */
+  /* ==========================================================================
+   * CUSTOM SCROLLBARS - Minimal, Notion-inspired
+   * ========================================================================== */
+
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted-foreground) transparent;
+  }
+
+  /* Webkit (Chrome, Safari, Edge) */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: oklch(from var(--muted-foreground) l c h / 0.3);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(from var(--muted-foreground) l c h / 0.5);
+  }
+
+  /* Textarea-specific scrollbar - stays within rounded corners */
+  textarea::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  textarea::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 4px; /* Inset from top/bottom to respect border-radius */
+  }
+
+  textarea::-webkit-scrollbar-thumb {
+    background: oklch(from var(--muted-foreground) l c h / 0.25);
+    border-radius: 4px;
+  }
+
+  textarea::-webkit-scrollbar-thumb:hover {
+    background: oklch(from var(--muted-foreground) l c h / 0.4);
+  }
+
+  /* Ensure textarea scrollbar respects container rounding */
+  [data-slot='textarea-control'] {
+    overflow: hidden; /* Clip scrollbar to rounded corners */
+  }
+
+  [data-slot='textarea'] {
+    overflow-y: auto;
+  }
+
+  /* Hide scrollbar utility */
   .hide-scrollbar {
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -181,5 +237,113 @@
 
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+
+  /* ==========================================================================
+   * CURSOR STATES - Intentional interaction feedback
+   * ========================================================================== */
+
+  /* Interactive elements should have pointer cursor */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  a[href],
+  label[for],
+  input[type='checkbox'],
+  input[type='radio'],
+  select:not(:disabled),
+  [tabindex]:not([tabindex='-1']):not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* Disabled elements */
+  button:disabled,
+  input:disabled,
+  select:disabled,
+  textarea:disabled,
+  [aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+
+  /* Text inputs */
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  input[type='search'],
+  input[type='url'],
+  input[type='tel'],
+  input[type='number'],
+  textarea {
+    cursor: text;
+  }
+
+  /* Loading state utility */
+  .cursor-wait,
+  [data-loading='true'] {
+    cursor: wait !important;
+  }
+
+  /* ==========================================================================
+   * TEXT OVERFLOW - Consistent truncation
+   * ========================================================================== */
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* ==========================================================================
+   * FOCUS STATES - Accessible, visible focus rings
+   * ========================================================================== */
+
+  /* Remove default focus outline, use ring instead */
+  :focus {
+    outline: none;
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--background),
+      0 0 0 4px var(--ring);
+    border-radius: inherit;
+  }
+
+  /* ==========================================================================
+   * LAYOUT STABILITY - Prevent layout shift
+   * ========================================================================== */
+
+  /* Reserve space for scrollbar to prevent layout shift */
+  .scrollbar-gutter {
+    scrollbar-gutter: stable;
+  }
+
+  /* Prevent content from causing horizontal scroll */
+  .overflow-wrap {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  /* Image loading placeholder to prevent layout shift */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ==========================================================================
+   * TRANSITIONS - Smooth, intentional animations
+   * ========================================================================== */
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }

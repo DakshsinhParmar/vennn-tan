@@ -1,11 +1,5 @@
-/**
- * AppShell - Main application layout wrapper
- *
- * Handles responsive layout with:
- * - Mobile: Fixed header + scrollable content + bottom navigation
- * - Desktop: Fixed sidebar + centered scrollable content
- */
 import { Sidebar } from './sidebar'
+
 import { MobileBottomBar } from './mobile-bottom-bar'
 import { MainContent } from './main-content'
 import type { ReactNode } from 'react'
@@ -21,18 +15,20 @@ export function AppShell({
   sidebarContent,
   bottomBarContent,
 }: AppShellProps) {
-  // Get route-specific content width
+  // const [mobileMenuOpen, setMobileMenuOpen] = useState(false) // Removed unused
   const mainContentClass = undefined
 
   return (
     <>
-      {/* Mobile: fixed chrome + document scroll */}
-      <div className="sm:hidden">
-        {/* Header is now handled by pages individually via PageHeader */}
-        <MobileBottomBar>{bottomBarContent}</MobileBottomBar>
+      {/* Mobile: Header + Sidebar Drawer + Content */}
+      <div className="sm:hidden flex flex-col min-h-dvh bg-background text-foreground">
         <MainContent variant="mobile" className={mainContentClass}>
           {children}
         </MainContent>
+
+        {bottomBarContent && (
+          <MobileBottomBar>{bottomBarContent}</MobileBottomBar>
+        )}
       </div>
 
       {/* Desktop: sidebar fixed, content absolutely centered */}

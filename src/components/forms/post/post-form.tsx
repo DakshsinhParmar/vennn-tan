@@ -1,11 +1,3 @@
-/**
- * PostForm - Unified form for creating and editing posts
- *
- * Consolidates CreatePostForm and EditPostForm following DRY principles.
- * Use `mode` prop to control behavior:
- * - 'create': Shows post type selector, uses default values
- * - 'edit': Hides post type selector, requires initialValues
- */
 import { useRef, useState, useEffect } from 'react'
 import { useStore } from '@tanstack/react-store'
 import { revalidateLogic } from '@tanstack/react-form'
@@ -36,7 +28,6 @@ import {
   TagsField,
 } from '@/components/forms'
 import { cn } from '@/lib/utils'
-import { layout } from '@/lib/design'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { SelectionCard } from '@/components/ui/selection-card'
@@ -129,18 +120,15 @@ export function PostForm({
         e.stopPropagation()
         void form.handleSubmit()
       }}
-      className={cn(layout.form.fieldGap, 'w-full px-1', className)}
+      className={cn('space-y-5 w-full px-1', className)}
       noValidate
     >
-      {/* Post Type Selector - Only shown in create mode */}
       {mode === 'create' && (
         <form.Field name="postType">
           {(field) => (
             <div className="space-y-2" data-field="postType">
               <Label>Post Type</Label>
-              <div
-                className={`grid grid-cols-1 sm:grid-cols-2 ${layout.form.sectionGap} pt-1`}
-              >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                 <SelectionCard
                   selected={field.state.value === 'build'}
                   onClick={() => !isSubmitting && field.handleChange('build')}
@@ -214,9 +202,7 @@ export function PostForm({
         {(field) => (
           <div className="space-y-2" data-field="availability">
             <Label>Who are you looking for?</Label>
-            <div
-              className={`grid grid-cols-1 sm:grid-cols-2 ${layout.form.sectionGap} pt-1`}
-            >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
               <SelectionCard
                 selected={field.state.value === 'open'}
                 onClick={() => {

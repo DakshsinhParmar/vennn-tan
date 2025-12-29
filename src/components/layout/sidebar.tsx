@@ -14,7 +14,7 @@ export function Sidebar({ children }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 bottom-0 z-40 flex flex-col bg-background',
+        'fixed left-0 top-0 bottom-0 z-40 flex flex-col bg-sidebar border-r border-sidebar-border',
         isCollapsed ? 'w-16' : 'w-16 lg:w-56',
       )}
     >
@@ -25,13 +25,16 @@ export function Sidebar({ children }: SidebarProps) {
         )}
       >
         <div className={cn('lg:hidden', isCollapsed && 'lg:block')}>
-          <IntersectSquareIcon className="size-6" weight="duotone" />
+          <IntersectSquareIcon
+            className="size-6 text-foreground"
+            weight="duotone"
+          />
         </div>
 
-        {/* Text Logo for expanded state */}
+        {/* Text Logo for expanded state - Notion style */}
         {!isCollapsed && (
-          <div className="hidden lg:flex items-center gap-2 font-bold text-xl tracking-tight ml-2">
-            <span className="tracking-tighter font-semibold">vennn</span>
+          <div className="hidden lg:flex items-center gap-2 font-bold text-xl tracking-tight ml-2 font-sans text-foreground">
+            vennn
           </div>
         )}
       </div>

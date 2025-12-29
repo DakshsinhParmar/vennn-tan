@@ -18,8 +18,8 @@ import { themeScript } from '@/lib/theme'
 import type { QueryClient } from '@tanstack/react-query'
 import { AppShell } from '@/components/layout/app-shell'
 import {
-  MobileNavigation,
   SidebarNavigation,
+  MobileNavigation,
 } from '@/components/layout/navigation'
 import { ThemeProvider } from '@/components/theme-provider'
 import { ToastProvider, AnchoredToastProvider } from '@/components/ui/toast'

@@ -134,7 +134,12 @@ function TimelineIndicator({
     <div
       aria-hidden="true"
       className={cn(
-        'group-data-[orientation=horizontal]/timeline:-top-6 group-data-[orientation=horizontal]/timeline:-translate-y-1/2 group-data-[orientation=vertical]/timeline:-left-7.5 group-data-[orientation=vertical]/timeline:-translate-x-1/2 absolute size-9 flex items-center justify-center rounded-full border-2 border-primary/20 bg-background p-0 overflow-hidden group-data-[orientation=vertical]/timeline:top-0 group-data-[orientation=horizontal]/timeline:left-0 group-data-completed/timeline-item:border-primary',
+        // Position: left-0 places indicator at start, matching PostCard avatar position
+        // Size: size-9 (36px) matches component.avatar.md
+        'absolute size-9 flex items-center justify-center rounded-full border-2 border-primary/20 bg-background overflow-hidden',
+        'group-data-[orientation=vertical]/timeline:left-0 group-data-[orientation=vertical]/timeline:top-0',
+        'group-data-[orientation=horizontal]/timeline:-top-6 group-data-[orientation=horizontal]/timeline:-translate-y-1/2 group-data-[orientation=horizontal]/timeline:left-0',
+        'group-data-completed/timeline-item:border-primary',
         className,
       )}
       data-slot="timeline-indicator"
@@ -156,7 +161,8 @@ function TimelineItem({ step, className, ...props }: TimelineItemProps) {
   return (
     <div
       className={cn(
-        'group/timeline-item relative flex flex-1 flex-col gap-0.5 group-data-[orientation=vertical]/timeline:ms-12 group-data-[orientation=horizontal]/timeline:mt-8 group-data-[orientation=horizontal]/timeline:not-last:pe-8 group-data-[orientation=vertical]/timeline:not-last:pb-8 has-[+[data-completed]]:[&_[data-slot=timeline-separator]]:bg-primary',
+        // Match PostCard layout: avatar (36px) + gap-2 (8px) = 44px = pl-11
+        'group/timeline-item relative flex flex-1 flex-col gap-0.5 group-data-[orientation=vertical]/timeline:ps-11 group-data-[orientation=horizontal]/timeline:mt-8 group-data-[orientation=horizontal]/timeline:not-last:pe-8 group-data-[orientation=vertical]/timeline:not-last:pb-8 has-[+[data-completed]]:[&_[data-slot=timeline-separator]]:bg-primary',
         className,
       )}
       data-completed={step <= activeStep || undefined}
@@ -175,7 +181,11 @@ function TimelineSeparator({
     <div
       aria-hidden="true"
       className={cn(
-        'group-data-[orientation=horizontal]/timeline:-top-6 group-data-[orientation=horizontal]/timeline:-translate-y-1/2 group-data-[orientation=vertical]/timeline:-left-7.5 group-data-[orientation=vertical]/timeline:-translate-x-1/2 absolute self-start bg-border group-last/timeline-item:hidden group-data-[orientation=horizontal]/timeline:h-px group-data-[orientation=vertical]/timeline:h-[calc(100%-1rem-0.25rem)] group-data-[orientation=horizontal]/timeline:w-[calc(100%-1rem-0.25rem)] group-data-[orientation=vertical]/timeline:w-px group-data-[orientation=horizontal]/timeline:translate-x-4.5 group-data-[orientation=vertical]/timeline:translate-y-6.5',
+        // Vertical line connecting timeline indicators
+        // Position: centered under the 36px indicator at left-[calc(18px-0.5px)] to account for 1px width
+        'absolute self-start bg-border group-last/timeline-item:hidden',
+        'group-data-[orientation=vertical]/timeline:left-[calc(18px-0.5px)] group-data-[orientation=vertical]/timeline:top-9 group-data-[orientation=vertical]/timeline:h-[calc(100%-2.25rem)] group-data-[orientation=vertical]/timeline:w-px',
+        'group-data-[orientation=horizontal]/timeline:-top-6 group-data-[orientation=horizontal]/timeline:-translate-y-1/2 group-data-[orientation=horizontal]/timeline:h-px group-data-[orientation=horizontal]/timeline:w-[calc(100%-1rem-0.25rem)] group-data-[orientation=horizontal]/timeline:translate-x-4.5',
         className,
       )}
       data-slot="timeline-separator"

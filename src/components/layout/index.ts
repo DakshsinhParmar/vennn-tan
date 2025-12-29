@@ -1,6 +1,6 @@
 export * from './app-shell'
 export * from './main-content'
-export * from './mobile-bottom-bar'
+export * from './mobile-header'
 export * from './navigation'
 export * from './page-header'
 export * from './sidebar'

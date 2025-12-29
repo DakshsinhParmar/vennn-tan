@@ -15,7 +15,6 @@ import { Field, FieldLabel, FieldError } from '@/components/ui/field'
 import { Textarea } from '@/components/ui/textarea'
 import { LinksField } from '@/components/forms'
 import type { TimelineEntryFormData } from '@/lib/types'
-import { cn } from '@/lib/utils'
 
 // Character limits for timeline entry fields
 const TIMELINE_LIMITS = {
@@ -115,30 +114,22 @@ export function TimelineEntryDialog({
         <DialogPanel className="space-y-4">
           <Field invalid={!!errors.title} className="w-full">
             <FieldLabel>Update</FieldLabel>
-            <div className="relative w-full">
-              <Textarea
-                placeholder="e.g. Released v1.0, Updated roadmap, Started development..."
-                value={formData.title}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                  if (e.target.value.length <= TIMELINE_LIMITS.title.max) {
-                    setFormData((prev) => ({ ...prev, title: e.target.value }))
-                  }
-                }}
-                rows={2}
-                disabled={isSubmitting}
-                maxLength={TIMELINE_LIMITS.title.max}
-                variant={errors.title ? 'destructive' : 'default'}
-                aria-invalid={!!errors.title}
-                className={cn('pb-8 w-full')}
-              />
-              <div
-                aria-live="polite"
-                className="pointer-events-none absolute bottom-0 end-0 flex items-center justify-center p-3 text-muted-foreground text-xs tabular-nums"
-                role="status"
-              >
-                {formData.title.length}/{TIMELINE_LIMITS.title.max}
-              </div>
-            </div>
+            <Textarea
+              placeholder="e.g. Released v1.0, Updated roadmap, Started development..."
+              value={formData.title}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                if (e.target.value.length <= TIMELINE_LIMITS.title.max) {
+                  setFormData((prev) => ({ ...prev, title: e.target.value }))
+                }
+              }}
+              rows={2}
+              disabled={isSubmitting}
+              maxLength={TIMELINE_LIMITS.title.max}
+              charCount={formData.title.length}
+              variant={errors.title ? 'destructive' : 'default'}
+              aria-invalid={!!errors.title}
+              className="w-full"
+            />
             {errors.title && <FieldError>{errors.title}</FieldError>}
           </Field>
 

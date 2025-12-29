@@ -161,7 +161,7 @@ export function MultiImageUpload({
         </FieldLabel>
       )}
       {description && (
-        <p className={`${text.smallMuted} -mt-1 mb-2`}>{description}</p>
+        <p className={`${text.smMuted} -mt-1 mb-2`}>{description}</p>
       )}
 
       <input
@@ -199,10 +199,10 @@ export function MultiImageUpload({
               className="size-10 text-muted-foreground mb-3"
               weight="light"
             />
-            <span className={`${text.small} font-medium text-muted-foreground`}>
+            <span className={`text-sm font-medium text-muted-foreground`}>
               Click to upload or drag and drop
             </span>
-            <span className={`${text.caption} text-muted-foreground/60 mt-1`}>
+            <span className={`text-xs text-muted-foreground/60 mt-1`}>
               JPEG, PNG, WEBP up to 5MB each
             </span>
           </button>
@@ -259,14 +259,14 @@ export function MultiImageUpload({
 
             {/* Counter */}
             <div className={`flex justify-between items-center`}>
-              <span className={text.captionMuted}>
+              <span className={text.xsMuted}>
                 {value.length} of {maxImages} images
               </span>
               {canAddMore && (
                 <button
                   type="button"
                   onClick={openFilePicker}
-                  className={`${text.small} font-medium text-primary hover:underline`}
+                  className={`text-sm font-medium text-primary hover:underline`}
                 >
                   Add more
                 </button>

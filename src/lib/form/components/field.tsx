@@ -87,34 +87,23 @@ export function InputField({
       errorMessage={errorMessage}
       className={className}
     >
-      <div className="relative">
-        <Input
-          type={type}
-          value={field.state.value}
-          onChange={(e) => {
-            if (!maxLength || e.target.value.length <= maxLength) {
-              field.handleChange(e.target.value)
-            }
-          }}
-          onBlur={field.handleBlur}
-          placeholder={placeholder}
-          variant={hasError ? 'destructive' : 'default'}
-          disabled={disabled}
-          aria-invalid={hasError}
-          aria-describedby={hasError ? `${field.name}-error` : undefined}
-          maxLength={maxLength}
-          className={cn(maxLength && 'pe-14')}
-        />
-        {maxLength && (
-          <div
-            aria-live="polite"
-            className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-muted-foreground text-xs tabular-nums"
-            role="status"
-          >
-            {charCount}/{maxLength}
-          </div>
-        )}
-      </div>
+      <Input
+        type={type}
+        value={field.state.value}
+        onChange={(e) => {
+          if (!maxLength || e.target.value.length <= maxLength) {
+            field.handleChange(e.target.value)
+          }
+        }}
+        onBlur={field.handleBlur}
+        placeholder={placeholder}
+        variant={hasError ? 'destructive' : 'default'}
+        disabled={disabled}
+        aria-invalid={hasError}
+        aria-describedby={hasError ? `${field.name}-error` : undefined}
+        maxLength={maxLength}
+        charCount={maxLength ? charCount : undefined}
+      />
     </FieldWrapper>
   )
 }
@@ -140,34 +129,23 @@ export function TextareaField({
       errorMessage={errorMessage}
       className={className}
     >
-      <div className="relative">
-        <Textarea
-          value={field.state.value}
-          onChange={(e) => {
-            if (!maxLength || e.target.value.length <= maxLength) {
-              field.handleChange(e.target.value)
-            }
-          }}
-          onBlur={field.handleBlur}
-          placeholder={placeholder}
-          variant={hasError ? 'destructive' : 'default'}
-          disabled={disabled}
-          aria-invalid={hasError}
-          aria-describedby={hasError ? `${field.name}-error` : undefined}
-          maxLength={maxLength}
-          rows={rows}
-          className={cn(maxLength && 'pb-8')}
-        />
-        {maxLength && (
-          <div
-            aria-live="polite"
-            className="pointer-events-none absolute bottom-0 end-0 flex items-center justify-center p-3 text-muted-foreground text-xs tabular-nums"
-            role="status"
-          >
-            {charCount}/{maxLength}
-          </div>
-        )}
-      </div>
+      <Textarea
+        value={field.state.value}
+        onChange={(e) => {
+          if (!maxLength || e.target.value.length <= maxLength) {
+            field.handleChange(e.target.value)
+          }
+        }}
+        onBlur={field.handleBlur}
+        placeholder={placeholder}
+        variant={hasError ? 'destructive' : 'default'}
+        disabled={disabled}
+        aria-invalid={hasError}
+        aria-describedby={hasError ? `${field.name}-error` : undefined}
+        maxLength={maxLength}
+        charCount={maxLength ? charCount : undefined}
+        rows={rows}
+      />
     </FieldWrapper>
   )
 }
